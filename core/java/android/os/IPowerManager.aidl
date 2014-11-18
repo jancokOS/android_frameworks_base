@@ -70,4 +70,8 @@ interface IPowerManager
 
     void wakeUpWithProximityCheck(long time, String reason, String opPackageName);
 
+    void setKeyboardVisibility(boolean visible);
+
+    void setKeyboardLight(boolean on, int key);
+
 }
