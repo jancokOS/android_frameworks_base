@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
@@ -292,7 +294,7 @@ public class NetworkTraffic extends TextView {
                     mTrafficHandler.sendEmptyMessage(1);
                 }
                 setVisibility(View.VISIBLE);
-                updateTrafficDrawable();
+                updateTrafficDrawable(mNetworkTrafficColor);
                 return;
             }
         } else {
@@ -316,7 +318,7 @@ public class NetworkTraffic extends TextView {
         mTrafficHandler.removeMessages(1);
     }
 
-    private void updateTrafficDrawable() {
+    private void updateTrafficDrawable(int trafcolor) {
         int intTrafficDrawable;
         Drawable drawTrafficIcon = null;
         if (!mHideArrow) {
