@@ -2927,5 +2927,8 @@
     <bool name="config_proximityCheckOnWake">false</bool>
     <integer name="config_proximityCheckTimeout">250</integer>
     <bool name="config_proximityCheckOnWakeEnabledByDefault">false</bool>
+    
+    <!-- Automatic brightness enhancements --> 
+    <integer name="config_autoBrightnessBrighteningLightFastDebounce">500</integer>
 
 </resources>
