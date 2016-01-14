@@ -3753,6 +3753,12 @@ public final class Settings {
          */
         public static final String KEY_APP_SWITCH_DOUBLE_TAP_ACTION = "key_app_switch_double_tap_action";
 
+	 /**
+         * whether to enable or disable vibration on succesful fingerprint auth
+         * @hide
+         */
+        public static final String FINGERPRINT_SUCCESS_VIB = "fingerprint_success_vib";
+
         /**
          * Action to perform when the app switch key is long-pressed.
          * (Default can be configured via config_longPressOnHardwareCameraBehavior)
