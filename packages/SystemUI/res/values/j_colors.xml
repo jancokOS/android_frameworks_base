@@ -13,4 +13,7 @@
 <resources>
     <!-- Pixel theme -->
     <color name="pixel_primary_color">#242424</color>
+
+    <!-- Status bar battery level text color -->
+    <color name="status_bar_battery_level_text_color">#ffffff</color>
 </resources>
