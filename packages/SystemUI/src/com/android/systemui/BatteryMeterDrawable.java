@@ -100,7 +100,6 @@ public class BatteryMeterDrawable extends Drawable implements
     private int mLevel = -1;
     private boolean mPluggedIn;
     private boolean mListening;
-    private boolean mBatteryPct;
 
     public BatteryMeterDrawable(Context context, Handler handler, int frameColor) {
         mContext = context;
@@ -117,7 +116,6 @@ public class BatteryMeterDrawable extends Drawable implements
         }
         levels.recycle();
         colors.recycle();
-        mBatteryPct = context.getResources().getBoolean(R.bool.config_showBatteryPercentage);
         updateShowPercent();
         mWarningString = context.getString(R.string.battery_meter_very_low_overlay_symbol);
         mCriticalLevel = mContext.getResources().getInteger(
@@ -268,8 +266,8 @@ public class BatteryMeterDrawable extends Drawable implements
     }
 
     private void updateShowPercent() {
-        mShowPercent = (0 != Settings.System.getInt(mContext.getContentResolver(),
-                SHOW_PERCENT_SETTING, 0)) && !mBatteryPct;
+        mShowPercent = 0 != Settings.System.getInt(mContext.getContentResolver(),
+                SHOW_PERCENT_SETTING, 0);
     }
 
     private int getColorForLevel(int percent) {
