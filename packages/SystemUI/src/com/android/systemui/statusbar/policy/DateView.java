@@ -41,11 +41,19 @@ public class DateView extends TextView {
     private DateFormat mDateFormat;
     private String mLastText;
     private String mDatePattern;
+    private boolean mScreenOn = true;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
+            if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+                updateClock();
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
+            }
+
             if (Intent.ACTION_TIME_TICK.equals(action)
                     || Intent.ACTION_TIME_CHANGED.equals(action)
                     || Intent.ACTION_TIMEZONE_CHANGED.equals(action)
@@ -55,7 +63,9 @@ public class DateView extends TextView {
                     // need to get a fresh date format
                     mDateFormat = null;
                 }
+                if (mScreenOn) {
                 updateClock();
+                }
             }
         }
     };
