@@ -20,14 +20,17 @@ import libcore.icu.LocaleData;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
@@ -68,9 +71,30 @@ public class Clock extends TextView implements DemoMode, Tunable {
     private static final int AM_PM_STYLE_SMALL   = 1;
     private static final int AM_PM_STYLE_GONE    = 2;
 
-    private final int mAmPmStyle;
+    private int mAmPmStyle;
     private boolean mShowSeconds;
     private Handler mSecondsHandler;
+
+    private SettingsObserver mSettingsObserver;
+
+    protected class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_AM_PM),
+                    false, this, UserHandle.USER_ALL);
+            updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
 
     public Clock(Context context) {
         this(context, null);
@@ -120,8 +144,11 @@ public class Clock extends TextView implements DemoMode, Tunable {
         mCalendar = Calendar.getInstance(TimeZone.getDefault());
 
         // Make sure we update to the current time
-        updateClock();
-        updateShowSeconds();
+        if (mSettingsObserver == null) {
+            mSettingsObserver = new SettingsObserver(new Handler());
+        }
+        mSettingsObserver.observe();
+        updateSettings();
     }
 
     @Override
@@ -129,6 +156,7 @@ public class Clock extends TextView implements DemoMode, Tunable {
         super.onDetachedFromWindow();
         if (mAttached) {
             getContext().unregisterReceiver(mIntentReceiver);
+            getContext().getContentResolver().unregisterContentObserver(mSettingsObserver);
             mAttached = false;
             TunerService.get(getContext()).removeTunable(this);
         }
@@ -151,7 +179,7 @@ public class Clock extends TextView implements DemoMode, Tunable {
                     mClockFormatString = ""; // force refresh
                 }
             }
-            updateClock();
+            updateSettings();
         }
     };
 
@@ -269,6 +297,21 @@ public class Clock extends TextView implements DemoMode, Tunable {
 
         return result;
 
+    }
+
+    protected void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+        boolean is24hour = DateFormat.is24HourFormat(mContext);
+        int amPmStyle = Settings.System.getIntForUser(resolver,
+                Settings.System.STATUS_BAR_AM_PM,
+                AM_PM_STYLE_SMALL,
+                UserHandle.USER_CURRENT);
+        mAmPmStyle = is24hour ? AM_PM_STYLE_SMALL : amPmStyle;
+        mClockFormatString = "";
+        if (mAttached) {
+            updateClock();
+            updateShowSeconds();
+        }
     }
 
     private boolean mDemoMode;
