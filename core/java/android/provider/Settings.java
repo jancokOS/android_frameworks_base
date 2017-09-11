@@ -3809,6 +3809,43 @@ public final class Settings {
                 new InclusiveIntegerRangeValidator(0, 2);
 
         /**
+         * Style of clock
+         * 0 - Right Clock (default)
+         * 1 - Center Clock
+         * 2 - Left Clock
+         * @hide
+         */
+        public static final String CLOCK_STYLE = "clock_style";
+
+        /** @hide */
+        public static final Validator CLOCK_STYLE_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 2);
+
+        /**
+         * Show or hide clock
+         * 0 - hide
+         * 1 - show (default)
+         * @hide
+         */
+        public static final String CLOCK_SHOW = "clock_show";
+
+        /** @hide */
+        public static final Validator CLOCK_SHOW_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 2);
+
+        /**
+         * Show or hide clock seconds
+         * 0 - hide (default)
+         * 1 - show
+         * @hide
+         */
+        public static final String CLOCK_SECONDS = "clock_seconds";
+
+        /** @hide */
+        public static final Validator CLOCK_SECONDS_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 2);
+
+        /**
          * Whether allowing pocket service to register sensors and dispatch informations.
          *   0 = disabled
          *   1 = enabled
@@ -4008,6 +4045,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(KEY_CAMERA_LONG_PRESS_ACTION);
             PRIVATE_SETTINGS.add(KEY_CAMERA_DOUBLE_TAP_ACTION);
             PRIVATE_SETTINGS.add(STATUS_BAR_AM_PM);
+            PRIVATE_SETTINGS.add(CLOCK_STYLE);
+            PRIVATE_SETTINGS.add(CLOCK_SHOW);
+            PRIVATE_SETTINGS.add(CLOCK_SECONDS);
             // Pocket mode handler.
             PRIVATE_SETTINGS.add(POCKET_JUDGE);
         }
@@ -4088,6 +4128,9 @@ public final class Settings {
             VALIDATORS.put(WIFI_STATIC_DNS1, WIFI_STATIC_DNS1_VALIDATOR);
             VALIDATORS.put(WIFI_STATIC_DNS2, WIFI_STATIC_DNS2_VALIDATOR);
             VALIDATORS.put(STATUS_BAR_AM_PM, STATUS_BAR_AM_PM_VALIDATOR);
+            VALIDATORS.put(CLOCK_STYLE, CLOCK_STYLE_VALIDATOR);
+            VALIDATORS.put(CLOCK_SHOW, CLOCK_SHOW_VALIDATOR);
+            VALIDATORS.put(CLOCK_SECONDS, CLOCK_SECONDS_VALIDATOR);
         }
 
         /**
